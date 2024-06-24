@@ -3,7 +3,7 @@
 /node_modules
 /build
 /postgres_data
-/auth/constants
+/auth/constants/jwt.constant.ts
 
 # Logs
 logs
