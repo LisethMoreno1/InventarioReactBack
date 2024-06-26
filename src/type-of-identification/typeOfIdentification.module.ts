@@ -6,6 +6,6 @@ import { TypeOfIdentification } from './entities/TypeOfIdentification.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([TypeOfIdentification])],
   providers: [TypeOfIdentificationService],
-  exports: [TypeOfIdentificationService], // Exportar el servicio si es necesario
+  exports: [TypeOfIdentificationService],
 })
 export class TypeOfIdentificationModule {}

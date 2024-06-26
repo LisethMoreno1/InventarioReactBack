@@ -28,9 +28,11 @@ export class UserController {
     return this.loginService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: number): Promise<User | undefined> {
-    return this.loginService.findOne(id);
+  @Get('identificationNumber')
+  async findOne(
+    @Param('identificationNumber') identificationNumber: number,
+  ): Promise<User | undefined> {
+    return this.loginService.findOne(identificationNumber);
   }
 
   @Put(':id')

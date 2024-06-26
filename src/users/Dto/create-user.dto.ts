@@ -1,12 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  IsPhoneNumber,
-  IsString,
-  IsInt,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 /**
  * DTO para la creación de un usuario.
@@ -17,9 +10,6 @@ export class CreateUserDto {
    */
   @ApiProperty({ example: 1 })
   @IsNotEmpty({ message: 'El ID del tipo de identificación es obligatorio.' })
-  @IsInt({
-    message: 'El ID del tipo de identificación debe ser un número entero.',
-  })
   typeOfIdentificationId: number;
 
   /**
@@ -27,9 +17,6 @@ export class CreateUserDto {
    */
   @ApiProperty({ example: 1231221211 })
   @IsNotEmpty({ message: 'El número de identificación es obligatorio.' })
-  @IsString({
-    message: 'El número de identificación debe ser una cadena de texto.',
-  })
   identificationNumber: string;
   /**
    * El primer nombre del usuario.
@@ -68,7 +55,6 @@ export class CreateUserDto {
    */
   @ApiProperty({ example: 3512421132 })
   @IsNotEmpty({ message: 'El número de teléfono es obligatorio.' })
-  @IsPhoneNumber(null, { message: 'El número de teléfono debe ser válido.' })
   phoneNumber: string;
 
   /**
@@ -83,15 +69,12 @@ export class CreateUserDto {
    * El ID del rol del usuario.
    */
   @ApiProperty({ example: 1 })
-  @IsNotEmpty({ message: 'El ID del rol es obligatorio.' })
-  @IsInt({ message: 'El ID del rol debe ser un número entero.' })
-  roleId: number;
+  typeOfRole: number;
 
   /**
    * La contraseña  del usuario.
    */
   @ApiProperty({ example: 'liseth123' })
   @IsNotEmpty({ message: 'La contraseña es obligatoria' })
-  @IsInt({ message: 'contraseña.' })
   password: string;
 }

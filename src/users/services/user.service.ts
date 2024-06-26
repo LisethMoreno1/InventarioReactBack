@@ -12,13 +12,18 @@ import { RolesService } from '../../rol/services/roles.service';
 import { CreateUserDto } from '../Dto/create-user.dto';
 import * as bcrypt from 'bcryptjs';
 import { TypeOfIdentificationService } from '../../type-of-identification/service/typeOfIdentification.service';
+import { Role } from '../../rol/entities/Role.entity';
+import { TypeOfIdentification } from '../../type-of-identification/entities/TypeOfIdentification.entity';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private userRepo: Repository<User>, // Repositorio para gestionar las operaciones de usuario
-    private readonly rolesService: RolesService, // Servicio para gestionar roles
-    private readonly typeOfIdentificationService: TypeOfIdentificationService, // Servicio para gestionar tipos de identificación
+    @InjectRepository(User) private userRepo: Repository<User>,
+    private readonly rolesService: RolesService,
+    @InjectRepository(Role) private roleRepo: Repository<Role>,
+    private readonly typeOfIdentificationService: TypeOfIdentificationService,
+    @InjectRepository(TypeOfIdentification)
+    private typeIdRepo: Repository<TypeOfIdentification>,
   ) {}
 
   // Crear un nuevo usuario
@@ -29,9 +34,11 @@ export class UserService {
     }
 
     // Buscar el rol por ID
-    const role = await this.rolesService.findRoleById(userData.roleId);
+    const role = await this.rolesService.findRoleById(userData.typeOfRole);
     if (!role) {
-      throw new NotFoundException(`Role with ID ${userData.roleId} not found`);
+      throw new NotFoundException(
+        `Role with ID ${userData.typeOfRole} not found`,
+      );
     }
 
     // Buscar el tipo de identificación por ID
@@ -45,7 +52,7 @@ export class UserService {
       );
     }
 
-    // Verificar si el usuario ya existe por email y numerio de identificacion
+    // Verificar si el usuario ya existe por  numerio de identificacion
     const existingUser = await this.userRepo.findOne({
       where: {
         identificationNumber: userData.identificationNumber,
@@ -58,7 +65,7 @@ export class UserService {
     }
 
     // Encriptar la contraseña antes de guardar el usuario
-    const hashedPassword = await bcrypt.hash(userData.password, 10); // 10 es el número de saltos
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
 
     // Crear la entidad del nuevo usuario
     const newUser = this.userRepo.create({
@@ -89,7 +96,7 @@ export class UserService {
     return await this.userRepo.findOne({ where: { identificationNumber } });
   }
 
-  // Almacenar  y actualizat token del ususario
+  // Almacenar  y actualiza token del usuario
   async updateAccessToken(id: number, accessToken: string): Promise<void> {
     const user = await this.userRepo.findOne({ where: { id } });
 
@@ -102,17 +109,22 @@ export class UserService {
   }
 
   // Encontrar un usuario por su ID
-  async findOne(id: number): Promise<User | undefined> {
-    const user = await this.userRepo.findOne({ where: { id } });
-    if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
-    }
-    return user;
+  async findOne(identificationNumber: number): Promise<User | undefined> {
+    return await this.userRepo
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.role', 'role')
+      .leftJoinAndSelect('user.typeOfIdentification', 'typeOfIdentification')
+      .where('user.identificationNumber = :identificationNumber', {
+        identificationNumber,
+      })
+      .getOne();
   }
 
   // Encontrar todos los usuarios
   async findAll(): Promise<User[]> {
-    return await this.userRepo.find();
+    return await this.userRepo.find({
+      relations: ['role', 'typeOfIdentification'],
+    });
   }
 
   // Actualizar un usuario existente
