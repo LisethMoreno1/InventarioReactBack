@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { Role } from '../../rol/entities/Role.entity';
-import { TypeOfIdentification } from '../../type-of-identification/entities/TypeOfIdentification.entity';
+import { TypeOfIdentification } from '../../Mantenimiento/type-of-identification/entities/TypeOfIdentification.entity';
+import { Role } from '../../Mantenimiento/rol/entities/Role.entity';
+import { typeOfGender } from '../../Mantenimiento/type-of-gender/entities/typeOfGender.entity';
 
 @Entity()
 export class User {
@@ -30,6 +31,9 @@ export class User {
 
   @Column()
   email: string;
+
+  @ManyToOne(() => typeOfGender, (typeOfGender) => typeOfGender.users)
+  genre: string;
 
   @ManyToOne(() => Role, (role) => role.users)
   role: Role;

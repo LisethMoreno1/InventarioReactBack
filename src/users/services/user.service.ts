@@ -1,4 +1,3 @@
-// user.service.ts
 import {
   Injectable,
   BadRequestException,
@@ -8,12 +7,13 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
-import { RolesService } from '../../rol/services/roles.service';
 import { CreateUserDto } from '../Dto/create-user.dto';
 import * as bcrypt from 'bcryptjs';
-import { TypeOfIdentificationService } from '../../type-of-identification/service/typeOfIdentification.service';
-import { Role } from '../../rol/entities/Role.entity';
-import { TypeOfIdentification } from '../../type-of-identification/entities/TypeOfIdentification.entity';
+import { RolesService } from '../../Mantenimiento/rol/services/roles.service';
+import { Role } from '../../Mantenimiento/rol/entities/Role.entity';
+import { TypeOfIdentification } from '../../Mantenimiento/type-of-identification/entities/TypeOfIdentification.entity';
+import { TypeOfIdentificationService } from '../../Mantenimiento/type-of-identification/service/typeOfIdentification.service';
+import { typeOfGender } from '../../Mantenimiento/type-of-gender/entities/typeOfGender.entity';
 
 @Injectable()
 export class UserService {
@@ -24,6 +24,8 @@ export class UserService {
     private readonly typeOfIdentificationService: TypeOfIdentificationService,
     @InjectRepository(TypeOfIdentification)
     private typeIdRepo: Repository<TypeOfIdentification>,
+    @InjectRepository(typeOfGender)
+    private typeOfGenderRepository: Repository<typeOfGender>,
   ) {}
 
   // Crear un nuevo usuario
@@ -113,6 +115,7 @@ export class UserService {
     return await this.userRepo
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.role', 'role')
+      .leftJoinAndSelect('user.genre', 'genre')
       .leftJoinAndSelect('user.typeOfIdentification', 'typeOfIdentification')
       .where('user.identificationNumber = :identificationNumber', {
         identificationNumber,
@@ -123,7 +126,7 @@ export class UserService {
   // Encontrar todos los usuarios
   async findAll(): Promise<User[]> {
     return await this.userRepo.find({
-      relations: ['role', 'typeOfIdentification'],
+      relations: ['role', 'typeOfIdentification', 'genre'],
     });
   }
 

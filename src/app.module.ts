@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './users/user.module';
-import { RolesModule } from './rol/roles.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
+import { RolesModule } from './Mantenimiento/rol/roles.module';
+import { TypeOfIdentificationModule } from './Mantenimiento/type-of-identification/typeOfIdentification.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AuthModule } from './auth/auth.module';
     UserModule,
     RolesModule,
     AuthModule,
+    TypeOfIdentificationModule,
   ],
   controllers: [],
 })

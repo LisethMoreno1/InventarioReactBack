@@ -66,6 +66,13 @@ export class CreateUserDto {
   email: string;
 
   /**
+   * genero del usuario.
+   */
+  @ApiProperty({ example: 1 })
+  @IsNotEmpty({ message: 'Es obligatorio.' })
+  genre: string;
+
+  /**
    * El ID del rol del usuario.
    */
   @ApiProperty({ example: 1 })
