@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { department } from '../../Department/entities/department.entity';
 
 @Entity({ schema: 'Mantenimiento', name: 'Cities' })
@@ -9,9 +15,13 @@ export class cities {
   @Column({ unique: true })
   cities: string;
 
-  @Column({ unique: true }) // Asegura que `codeCities` sea único
+  @Column({ unique: true })
   codeCities: string;
 
-  @OneToMany(() => department, (department) => department.cities)
-  departments: department[];
+  @ManyToOne(() => department, (department) => department.cities)
+  @JoinColumn({ name: 'departmentId' })
+  department: department;
+
+  @Column({ nullable: false })
+  departmentId: number;
 }

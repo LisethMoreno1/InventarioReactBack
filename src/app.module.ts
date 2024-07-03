@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { RolesModule } from './Mantenimiento/rol/roles.module';
 import { TypeOfIdentificationModule } from './Mantenimiento/type-of-identification/typeOfIdentification.module';
+import { DepartmentModule } from './Mantenimiento/Department/Department.module';
+import { CitiesModule } from './Mantenimiento/cities/cities.module';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { TypeOfIdentificationModule } from './Mantenimiento/type-of-identificati
     RolesModule,
     AuthModule,
     TypeOfIdentificationModule,
+    DepartmentModule,
+    CitiesModule,
   ],
   controllers: [],
 })

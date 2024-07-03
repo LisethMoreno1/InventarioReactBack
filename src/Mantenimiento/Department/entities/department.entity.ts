@@ -1,10 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { cities } from '../../cities/entities/cities.entity';
 
 @Entity({ schema: 'Mantenimiento', name: 'Departments' })
@@ -18,7 +12,6 @@ export class department {
   @Column()
   codeDepartment: string;
 
-  @ManyToOne(() => cities, (cities) => cities.departments)
-  @JoinColumn({ name: 'codeCities', referencedColumnName: 'codeCities' })
-  cities: cities;
+  @OneToMany(() => cities, (cities) => cities.department)
+  cities: cities[];
 }
