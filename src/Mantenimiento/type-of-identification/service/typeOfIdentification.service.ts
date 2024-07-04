@@ -10,6 +10,10 @@ export class TypeOfIdentificationService {
     private readonly typeOfIdentificationRepository: Repository<TypeOfIdentification>,
   ) {}
 
+  async findAll(): Promise<TypeOfIdentification[]> {
+    return await this.typeOfIdentificationRepository.find();
+  }
+
   async findById(id: number): Promise<TypeOfIdentification> {
     const type = await this.typeOfIdentificationRepository.findOne({
       where: { id },

@@ -19,4 +19,8 @@ export class TypeOfGenderService {
     }
     return type;
   }
+
+  async findAll(): Promise<typeOfGender[]> {
+    return await this.typeOfGenderRepository.find();
+  }
 }
