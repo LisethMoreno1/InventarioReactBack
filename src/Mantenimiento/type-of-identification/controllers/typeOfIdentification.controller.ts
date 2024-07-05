@@ -1,6 +1,10 @@
 import {
   Controller,
   Get,
+  Post,
+  Put,
+  Delete,
+  Body,
   Param,
   ParseIntPipe,
   NotFoundException,
@@ -28,9 +32,43 @@ export class TypeOfIdentificationController {
     const type = await this.typeOfIdentificationService.findById(id);
     if (!type) {
       throw new NotFoundException(
-        `TypeOfIdentification with ID ${id} not found`,
+        `TypeOfIdentification con ID ${id} no encontrado`,
       );
     }
     return type;
+  }
+
+  @Post()
+  async create(
+    @Body() typeOfIdentification: TypeOfIdentification,
+  ): Promise<TypeOfIdentification> {
+    return this.typeOfIdentificationService.create(typeOfIdentification);
+  }
+
+  @Put(':id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatedTypeOfIdentification: TypeOfIdentification,
+  ): Promise<TypeOfIdentification> {
+    const updatedType = await this.typeOfIdentificationService.update(
+      id,
+      updatedTypeOfIdentification,
+    );
+    if (!updatedType) {
+      throw new NotFoundException(
+        `TypeOfIdentification con ID ${id} no encontrado`,
+      );
+    }
+    return updatedType;
+  }
+
+  @Delete(':id')
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    const result = await this.typeOfIdentificationService.delete(id);
+    if (result === 0) {
+      throw new NotFoundException(
+        `TypeOfIdentification con ID ${id} no encontrado`,
+      );
+    }
   }
 }

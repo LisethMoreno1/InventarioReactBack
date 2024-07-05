@@ -20,9 +20,36 @@ export class TypeOfIdentificationService {
     });
     if (!type) {
       throw new NotFoundException(
-        `TypeOfIdentification with ID ${id} not found`,
+        `TypeOfIdentification con ID ${id} no encontrado`,
       );
     }
     return type;
+  }
+
+  async create(newType: TypeOfIdentification): Promise<TypeOfIdentification> {
+    const createdType = this.typeOfIdentificationRepository.create(newType);
+    return await this.typeOfIdentificationRepository.save(createdType);
+  }
+
+  async update(
+    id: number,
+    updatedType: TypeOfIdentification,
+  ): Promise<TypeOfIdentification> {
+    const type = await this.typeOfIdentificationRepository.findOne({
+      where: { id },
+    });
+    if (!type) {
+      throw new NotFoundException(
+        `TypeOfIdentification con ID ${id} no encontrado`,
+      );
+    }
+
+    await this.typeOfIdentificationRepository.update({ id }, updatedType);
+    return await this.typeOfIdentificationRepository.findOne({ where: { id } });
+  }
+
+  async delete(id: number): Promise<number> {
+    const result = await this.typeOfIdentificationRepository.delete({ id });
+    return result.affected || 0;
   }
 }
