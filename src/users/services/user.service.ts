@@ -77,7 +77,6 @@ export class UserService {
       password: hashedPassword, // Guardar la contraseña encriptada
     });
 
-    // Guardar el usuario en la base de datos y retornar la entidad guardada
     return this.userRepo.save(newUser);
   }
 
@@ -141,23 +140,26 @@ export class UserService {
     if (userData.password) {
       userData.password = await bcrypt.hash(userData.password, 10);
     }
-
-    // Fusionar los nuevos datos en la entidad existente
     this.userRepo.merge(userToUpdate, userData);
-
-    // Guardar el usuario actualizado en la base de datos
     return await this.userRepo.save(userToUpdate);
   }
 
-  // Eliminar un usuario por su ID
-  async delete(id: number): Promise<boolean> {
-    const userToDelete = await this.userRepo.findOne({ where: { id } });
-    if (!userToDelete) {
+  //Eliminar por estado
+  async delete(id: number, state: number): Promise<boolean> {
+    const user = await this.userRepo.findOne({ where: { id } });
+    if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
+    if (state === 1) {
+      user.isActive = true; // Usuario activo
+    } else if (state === 2) {
+      user.isActive = false; // Usuario desactivado
+    } else {
+      throw new Error(`Invalid state value ${state}`);
+    }
 
-    // Eliminar el usuario de la base de datos
-    await this.userRepo.remove(userToDelete);
+    await this.userRepo.save(user);
+
     return true;
   }
 }

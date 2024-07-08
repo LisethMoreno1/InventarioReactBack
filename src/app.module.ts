@@ -1,14 +1,16 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { UserModule } from './users/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
-import { RolesModule } from './Mantenimiento/rol/roles.module';
-import { TypeOfIdentificationModule } from './Mantenimiento/type-of-identification/typeOfIdentification.module';
-import { DepartmentModule } from './Mantenimiento/Department/Department.module';
-import { CitiesModule } from './Mantenimiento/cities/cities.module';
 import * as fs from 'fs';
 import * as path from 'path';
+import { AuthModule } from './auth/auth.module';
+import { CitiesModule } from './Mantenimiento/cities/cities.module';
+import { DepartmentModule } from './Mantenimiento/Department/Department.module';
+import { RolesModule } from './Mantenimiento/rol/roles.module';
+import { TypeOfIdentificationModule } from './Mantenimiento/type-of-identification/typeOfIdentification.module';
+import { UserModule } from './users/user.module';
+import { CategoryModule } from './Mantenimiento/category/category.module';
+import { SubcategoryModule } from './Mantenimiento/category/Subcategory/subcategory .module';
 
 const configPath = path.join(__dirname, '..', 'config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
@@ -37,6 +39,8 @@ const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
     TypeOfIdentificationModule,
     DepartmentModule,
     CitiesModule,
+    CategoryModule,
+    SubcategoryModule,
   ],
   controllers: [],
 })

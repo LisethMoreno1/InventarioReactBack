@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
@@ -42,8 +43,11 @@ export class UserController {
     return this.loginService.update(id, loginData);
   }
 
-  @Delete(':id')
-  async delete(@Param('id') id: number): Promise<boolean> {
-    return this.loginService.delete(id);
+  @Delete(':id/:state')
+  async delete(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('state', ParseIntPipe) state: number,
+  ): Promise<boolean> {
+    return this.loginService.delete(id, state);
   }
 }

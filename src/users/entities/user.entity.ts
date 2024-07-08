@@ -43,4 +43,7 @@ export class User {
 
   @Column({ nullable: true })
   accessToken: string;
+
+  @Column({ default: true })
+  isActive: boolean;
 }
