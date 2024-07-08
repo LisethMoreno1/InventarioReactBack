@@ -4,6 +4,8 @@
 /build
 /postgres_data
 /auth/constants/jwt.constant.ts
+/config.json
+
 
 # Logs
 logs
