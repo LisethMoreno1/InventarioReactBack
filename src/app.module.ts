@@ -11,6 +11,8 @@ import { TypeOfIdentificationModule } from './Mantenimiento/type-of-identificati
 import { UserModule } from './users/user.module';
 import { CategoryModule } from './Mantenimiento/category/category.module';
 import { SubcategoryModule } from './Mantenimiento/category/Subcategory/subcategory .module';
+import { CustomersModule } from './Customers/customers.module';
+import { OrdersModule } from './Order/Order.module';
 
 const configPath = path.join(__dirname, '..', 'config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
@@ -41,6 +43,8 @@ const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
     CitiesModule,
     CategoryModule,
     SubcategoryModule,
+    CustomersModule,
+    OrdersModule,
   ],
   controllers: [],
 })
