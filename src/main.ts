@@ -22,11 +22,15 @@ async function bootstrap() {
   });
   // Habilitar CORS
   app.enableCors({
-    origin: ['http://localhost:3001', 'http://localhost:3002'],
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'http://localhost:3002',
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(3000);
+  await app.listen(3001);
 }
 bootstrap();

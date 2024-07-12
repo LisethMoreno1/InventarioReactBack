@@ -6,16 +6,9 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { TypeOfIdentification } from '../../Mantenimiento/type-of-identification/entities/TypeOfIdentification.entity';
-import { Order } from '../../Order/entities/order.entity';
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { Order } from '../../Orders/Entities/order.entity';
 
-@Entity({ name: 'Customers' })
+@Entity({ name: 'customers' })
 export class Customers {
   @PrimaryGeneratedColumn()
   id: number;
@@ -23,28 +16,19 @@ export class Customers {
   @ManyToOne(() => TypeOfIdentification, (typeOfId) => typeOfId.customers)
   typeOfIdentification: TypeOfIdentification;
 
-  @Column({ unique: true })
-  @IsString()
-  @IsNotEmpty()
+  @Column()
   identificationNumber: string;
 
   @Column()
-  @IsString()
   name: string;
 
-  @Column({ nullable: true })
-  @IsNumber()
-  @IsOptional()
-  phone: number;
+  @Column()
+  phone: string;
 
-  @Column({ nullable: true })
-  @IsEmail()
-  @IsOptional()
+  @Column()
   email: string;
 
-  @Column({ nullable: true })
-  @IsString()
-  @IsOptional()
+  @Column()
   address: string;
 
   @OneToMany(() => Order, (order) => order.customer)

@@ -1,24 +1,23 @@
-import { IsEmail, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { TypeOfIdentification } from '../../Mantenimiento/type-of-identification/entities/TypeOfIdentification.entity';
+import { CreateOrderDto } from '../../Orders/Dto/create-order.dto';
 
 export class CreateCustomerDto {
+  typeOfIdentification: TypeOfIdentification;
+
+  @IsNotEmpty()
+  identificationNumber: string;
+
   @IsString()
   name: string;
 
-  @IsNumber()
-  typeOfIdentification: number;
-
   @IsString()
-  identificationNumber: string;
-
-  @IsNumber()
-  @IsOptional()
-  phone: number;
+  phone: string;
 
   @IsEmail()
-  @IsOptional()
   email: string;
 
   @IsString()
-  @IsOptional()
   address: string;
+  order: CreateOrderDto;
 }
