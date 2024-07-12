@@ -4,11 +4,13 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { TypeOfIdentification } from '../../Mantenimiento/type-of-identification/entities/TypeOfIdentification.entity';
 import { Order } from '../../Orders/Entities/order.entity';
 
 @Entity({ name: 'customers' })
+@Unique(['identificationNumber'])
 export class Customers {
   @PrimaryGeneratedColumn()
   id: number;

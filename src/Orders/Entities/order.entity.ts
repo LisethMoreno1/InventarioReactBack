@@ -18,7 +18,13 @@ export class Order {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   entryDate: Date;
 
+  @Column()
+  customerIdentificationNumber: string;
+
   @ManyToOne(() => Customers, (customer) => customer.orders)
-  @JoinColumn({ name: 'customerId' })
+  @JoinColumn({
+    name: 'customerIdentificationNumber',
+    referencedColumnName: 'identificationNumber',
+  })
   customer: Customers;
 }

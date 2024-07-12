@@ -1,34 +1,37 @@
-import { Body, Controller, Get, NotFoundException, Post } from '@nestjs/common';
-import { CustomersService } from '../../Customers/services/customer.service';
-import { CreateOrderDto } from '../Dto/create-order.dto';
-import { Order } from '../Entities/order.entity';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  NotFoundException,
+} from '@nestjs/common';
+import { CreateOrderDto } from '../dto/create-order.dto';
+import { Order } from '../entities/order.entity';
 import { OrdersService } from '../services/order.service';
 import { ApiTags } from '@nestjs/swagger';
 
-ApiTags('Orders');
+@ApiTags('Orders')
 @Controller('api/orders')
 export class OrdersController {
-  constructor(
-    private readonly ordersService: OrdersService,
-    private readonly customersService: CustomersService,
-  ) {}
-
-  @Post()
-  async createOrder(@Body() createOrderDto: CreateOrderDto): Promise<Order> {
-    const customer = await this.customersService.findById(
-      createOrderDto.customerId,
-    );
-    if (!customer) {
-      throw new NotFoundException(
-        `Customer with ID ${createOrderDto.customerId} not found.`,
-      );
-    }
-
-    return this.ordersService.createOrder(createOrderDto);
-  }
+  constructor(private readonly ordersService: OrdersService) {}
 
   @Get()
-  async findAllOrders(): Promise<Order[]> {
+  async findAll(): Promise<Order[]> {
     return this.ordersService.findAllOrders();
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: number): Promise<Order> {
+    const order = await this.ordersService.findOne(id);
+    if (!order) {
+      throw new NotFoundException(`Order with ID ${id} not found.`);
+    }
+    return order;
+  }
+
+  @Post()
+  async create(@Body() createOrderDto: CreateOrderDto): Promise<Order> {
+    return this.ordersService.createOrder(createOrderDto);
   }
 }

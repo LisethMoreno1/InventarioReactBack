@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Order } from '../Entities/order.entity';
 import { CustomersService } from '../../Customers/services/customer.service';
-import { CreateOrderDto } from '../Dto/create-order.dto';
+import { CreateOrderDto } from '../dto/create-order.dto';
+import { Order } from '../entities/order.entity';
 
 @Injectable()
 export class OrdersService {
@@ -14,12 +14,14 @@ export class OrdersService {
   ) {}
 
   async createOrder(createOrderDto: CreateOrderDto): Promise<Order> {
+    // Busca el cliente por su número de identificación
+
     const customer = await this.customersService.findById(
-      createOrderDto.customerId,
+      createOrderDto.customerIdentificationNumber,
     );
     if (!customer) {
       throw new NotFoundException(
-        `Customer with ID ${createOrderDto.customerId} not found.`,
+        `Cliente con ID ${createOrderDto.customerIdentificationNumber} no encontrado.`,
       );
     }
 
@@ -33,5 +35,12 @@ export class OrdersService {
 
   async findAllOrders(): Promise<Order[]> {
     return this.orderRepository.find({ relations: ['customer'] });
+  }
+
+  async findOne(id: number): Promise<Order | undefined> {
+    return this.orderRepository.findOne({
+      where: { id },
+      relations: ['customer'],
+    });
   }
 }

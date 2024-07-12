@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Customers } from '../Entities/customers.entity';
 import { Order } from '../../Orders/Entities/order.entity';
 import { CreateCustomerDto } from '../Dto/create.customers.dto';
+import { Customers } from '../Entities/customers.entity';
 
 @Injectable()
 export class CustomersService {
@@ -20,15 +20,23 @@ export class CustomersService {
     });
   }
 
-  async findById(id: number): Promise<Customers | undefined> {
+  async findById(
+    identificationNumber: number | string,
+  ): Promise<Customers | undefined> {
+    // Encuentra un cliente por su número de identificación, cargando las órdenes relacionadas
+
     return this.customersRepository
       .createQueryBuilder('customer')
       .leftJoinAndSelect('customer.orders', 'orders')
-      .where('customer.id = :id', { id })
+      .where('customer.identificationNumber = :identificationNumber', {
+        identificationNumber,
+      })
       .getOne();
   }
 
-  async findOne(identificationNumber: number): Promise<Customers | undefined> {
+  async findOne(
+    identificationNumber: string | number,
+  ): Promise<Customers | undefined> {
     return await this.customersRepository
       .createQueryBuilder('customer')
       .leftJoinAndSelect(

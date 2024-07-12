@@ -23,7 +23,7 @@ export class CustomersController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') identificationNumber: number): Promise<Customers> {
+  async findOne(@Param('id') identificationNumber: string): Promise<Customers> {
     return this.customersService.findOne(identificationNumber);
   }
 
