@@ -162,4 +162,15 @@ export class UserService {
 
     return true;
   }
+
+
+  async updatePassword(id: number, newPassword: string): Promise<void> {
+    const user = await this.userRepo.findOne({ where: { id } });
+    if (user) {
+      user.password = newPassword; 
+      await this.userRepo.save(user);
+    } else {
+      throw new Error('Usuario no encontrado'); 
+    }
+  }
 }
