@@ -6,6 +6,13 @@ export class CreateTypeOfIdentificationDto {
    * Nombre de tipo de documento
    */
   @ApiProperty({ example: 'Pasaporte' })
-  @IsNotEmpty({ message: 'El typeOfIdentification es obligatorio.' })
-  readonly typeOfIdentification: string;
+  @IsNotEmpty({ message: 'El name es obligatorio.' })
+  name: string;
+
+  /**
+   * Nombre de tipo de documento
+   */
+  @ApiProperty({ example: 'Pasaporte' })
+  @IsNotEmpty({ message: 'El identifier es obligatorio.' })
+  identifier: string;
 }

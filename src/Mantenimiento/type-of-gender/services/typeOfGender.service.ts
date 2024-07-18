@@ -48,8 +48,8 @@ export class TypeOfGenderService {
     return await this.typeOfGenderRepository.save(typeToUpdate);
   }
 
-  async delete(genre: string): Promise<number> {
-    const result = await this.typeOfGenderRepository.delete({ genre });
+  async delete(id: number): Promise<number> {
+    const result = await this.typeOfGenderRepository.delete({ id });
     return result.affected || 0;
   }
 }

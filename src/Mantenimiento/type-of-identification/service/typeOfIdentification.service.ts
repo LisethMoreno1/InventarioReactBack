@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TypeOfIdentification } from '../entities/TypeOfIdentification.entity';
@@ -27,8 +31,16 @@ export class TypeOfIdentificationService {
   }
 
   async create(newType: TypeOfIdentification): Promise<TypeOfIdentification> {
-    const createdType = this.typeOfIdentificationRepository.create(newType);
-    return await this.typeOfIdentificationRepository.save(createdType);
+    const { name } = newType;
+    const existingType = await this.typeOfIdentificationRepository.findOne({
+      where: { name },
+    });
+    if (existingType) {
+      throw new ConflictException(
+        `El tipo de identificación '${name}' ya existe.`,
+      );
+    }
+    return this.typeOfIdentificationRepository.save(newType);
   }
 
   async update(

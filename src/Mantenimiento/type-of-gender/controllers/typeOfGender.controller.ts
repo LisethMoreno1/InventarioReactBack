@@ -7,6 +7,7 @@ import {
   Body,
   NotFoundException,
   Param,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { typeOfGender } from '../entities/typeOfGender.entity';
 import { TypeOfGenderService } from '../services/typeOfGender.service';
@@ -53,7 +54,7 @@ export class TypeOfGenderController {
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string): Promise<void> {
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     const result = await this.typeOfGenderService.delete(id);
     if (result === 0) {
       throw new NotFoundException(`TypeOfGender con id ${id} no encontrado`);
