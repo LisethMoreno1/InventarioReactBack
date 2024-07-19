@@ -14,6 +14,8 @@ import { TypeOfIdentificationModule } from './Mantenimiento/type-of-identificati
 import { UserModule } from './users/user.module';
 import { OrdersModule } from './Orders/orders.module';
 import { MailModule } from './Mail/mail.module';
+import { OrderDetailsModule } from './OrderDetails/orderDetails.module';
+import { OrderStatusModule } from './OrderStatus/orderStatus.module';
 
 const configPath = path.join(__dirname, '..', 'config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
@@ -47,6 +49,8 @@ const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
     CustomersModule,
     OrdersModule,
     MailModule,
+    OrderDetailsModule,
+    OrderStatusModule
   ],
   controllers: [],
 })

@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from '../../Orders/Entities/order.entity';
@@ -23,8 +27,6 @@ export class CustomersService {
   async findById(
     identificationNumber: number | string,
   ): Promise<Customers | undefined> {
-    // Encuentra un cliente por su número de identificación, cargando las órdenes relacionadas
-
     return this.customersRepository
       .createQueryBuilder('customer')
       .leftJoinAndSelect('customer.orders', 'orders')
@@ -35,9 +37,9 @@ export class CustomersService {
   }
 
   async findOne(
-    identificationNumber: string | number,
+    identificationNumber: number | string,
   ): Promise<Customers | undefined> {
-    return await this.customersRepository
+    return this.customersRepository
       .createQueryBuilder('customer')
       .leftJoinAndSelect(
         'customer.typeOfIdentification',
@@ -51,47 +53,76 @@ export class CustomersService {
   }
 
   async create(customerData: CreateCustomerDto): Promise<Customers> {
-    const { identificationNumber } = customerData;
-
-    // Verificar si ya existe un cliente con ese número de identificación
+    const { identificationNumber, order } = customerData;
+  
+   // Comprueba si el cliente ya existe
     const existingCustomer = await this.customersRepository.findOne({
       where: { identificationNumber },
     });
-
+  
     if (existingCustomer) {
-      throw new Error('Este número de identificación ya está registrado.');
+      throw new ConflictException(
+        'Este número de identificación ya está registrado.',
+      );
     }
-
-    const newCustomer = new Customers();
-    newCustomer.typeOfIdentification = customerData.typeOfIdentification;
-    newCustomer.identificationNumber = customerData.identificationNumber;
-    newCustomer.name = customerData.name;
-    newCustomer.phone = customerData.phone;
-    newCustomer.email = customerData.email;
-    newCustomer.address = customerData.address;
-
-    const customer = await this.customersRepository.save(newCustomer);
-
-    if (customerData.order) {
-      const order = new Order();
-      order.price = customerData.order.price;
-      order.entryDate = new Date();
-      order.customer = customer;
-      await this.orderRepository.save(order);
+  
+    // Crear un nuevo cliente
+    const newCustomer = this.customersRepository.create(customerData);
+  
+    try {
+      return await this.customersRepository.manager.transaction(
+        async (transactionalEntityManager) => {
+          const customer = await transactionalEntityManager.save(
+            Customers,
+            newCustomer,
+          );
+  
+          if (order) {
+            const orderNumber = await this.generateOrderNumber();
+            const newOrder = this.orderRepository.create({
+              ...order,
+              entryDate: new Date(),
+              customer,
+              orderNumber,
+            });
+            await transactionalEntityManager.save(Order, newOrder);
+          }
+  
+          return customer;
+        },
+      );
+    } catch (error) {
+ 
+      throw new ConflictException(
+        `Error al crear cliente y orden: ${error.message}`,
+      );
     }
-
-    return customer;
+  }
+  
+  //Genera un número de orden único utilizando la marca de tiempo actual
+  private generateOrderNumber(): string {
+    return `ORD-${Date.now()}`;
   }
 
   async update(
     id: number,
     customerData: Partial<Customers>,
   ): Promise<Customers> {
+    const customer = await this.customersRepository.findOne({ where: { id } });
+    if (!customer) {
+      throw new NotFoundException(`Cliente con ID ${id} no encontrado.`);
+    }
+
     await this.customersRepository.update(id, customerData);
     return this.customersRepository.findOne({ where: { id } });
   }
 
   async remove(id: number): Promise<void> {
+    const customer = await this.customersRepository.findOne({ where: { id } });
+    if (!customer) {
+      throw new NotFoundException(`Cliente con ID ${id} no encontrado.`);
+    }
+
     await this.customersRepository.delete(id);
   }
 }

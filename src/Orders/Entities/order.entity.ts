@@ -4,27 +4,31 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import { Customers } from '../../Customers/Entities/customers.entity';
+import { OrderDetailsE } from '../../OrderDetails/entities/orderDetails.entity';
+import { OrderStatus } from '../../OrderStatus/Entities/orderStatus.entity';
 
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  price: number;
+  @Column({ nullable: false, type: 'varchar', length: 20 })
+  orderNumber: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   entryDate: Date;
 
-  @Column()
-  customerIdentificationNumber: string;
-
   @ManyToOne(() => Customers, (customer) => customer.orders)
-  @JoinColumn({
-    name: 'customerIdentificationNumber',
-    referencedColumnName: 'identificationNumber',
-  })
+  @JoinColumn({ name: 'customerId' })
   customer: Customers;
+
+  @OneToOne(() => OrderDetailsE)
+  @JoinColumn()
+  orderDetails: OrderDetailsE;
+
+  @ManyToOne(() => OrderStatus, (orderStatus) => orderStatus.orders)
+  orderStatus: OrderStatus;
 }

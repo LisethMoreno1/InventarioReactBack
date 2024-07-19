@@ -1,21 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateOrderDto {
+  
+  @ApiProperty({ example: 'ORD-0001', description: 'Número de orden generado' })
+  orderNumber?: string;
   /**
-   * Valor de la orden
+   * La fecha en la que se está registrando la orden.
    */
-  @ApiProperty({ example: 100000 })
-  price: number;
-
-  /**
-   * La fecha que se esta registradno
-   */
-  @ApiProperty({ example: ' 2024-07-12' })
+  @ApiProperty({ example: '2024-07-12', description: 'Fecha en la que se está registrando la orden' })
   entryDate: Date;
 
   /**
-   *Numero de identificacion del Customer
+   * Número de identificación del Customer.
    */
-  @ApiProperty({ example: 12212111 })
+  @ApiProperty({ example: '12212111', description: 'Número de identificación del cliente' })
   customerIdentificationNumber: string;
 }

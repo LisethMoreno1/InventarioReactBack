@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Subcategory } from '../Subcategory/entities/subcategory.entity';
 import { Product } from '../../../Products/entitys/products.entity';
+import { OrderDetailsE } from '../../../OrderDetails/entities/orderDetails.entity';
 
 @Entity({ schema: 'Mantenimiento', name: 'Category' })
 export class Category {
@@ -24,4 +25,7 @@ export class Category {
 
   @ManyToMany(() => Product, (product) => product.categories)
   products: Product[];
+
+  @ManyToMany(() => OrderDetailsE, (orderDetails) => orderDetails.categories)
+  orderDetails: OrderDetailsE[];
 }
