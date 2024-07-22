@@ -23,10 +23,6 @@ export class UpdateOrderDetailsDto {
 
   @IsOptional()
   @IsString()
-  vinNumber?: string;
-
-  @IsOptional()
-  @IsString()
   descriptionOfProblem?: string;
 
   @IsOptional()
@@ -36,22 +32,6 @@ export class UpdateOrderDetailsDto {
   @IsOptional()
   @IsArray()
   subcategories?: number[]; // Array of Subcategory IDs
-
-  @IsOptional()
-  @IsNumber()
-  laborCost?: number;
-
-  @IsOptional()
-  @IsNumber()
-  partsCost?: number;
-
-  @IsOptional()
-  @IsNumber()
-  totalEstimatedCost?: number;
-
-  @IsOptional()
-  @IsNumber()
-  discounts?: number;
 
   @IsOptional()
   @IsInt()
@@ -64,4 +44,6 @@ export class UpdateOrderDetailsDto {
   @IsOptional()
   @Type(() => Date)
   dateOfEntry?: Date;
+
+
 }

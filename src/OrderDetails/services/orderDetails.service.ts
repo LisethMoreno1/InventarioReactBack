@@ -41,15 +41,13 @@ export class OrderDetailsService {
 
     // Si hay categorías, busca las entidades correspondientes
     if (categories) {
-      const categoryEntities =
-        await this.categoryRepository.findByIds(categories);
+      const categoryEntities = await this.categoryRepository.findByIds(categories);
       orderDetails.categories = categoryEntities;
     }
 
     // Si hay subcategorías, busca las entidades correspondientes
     if (subcategories) {
-      const subcategoryEntities =
-        await this.subcategoryRepository.findByIds(subcategories);
+      const subcategoryEntities = await this.subcategoryRepository.findByIds(subcategories);
       orderDetails.subcategories = subcategoryEntities;
     }
 
@@ -89,8 +87,8 @@ export class OrderDetailsService {
 
   async findOne(id: number): Promise<OrderDetailsE> {
     const orderDetails = await this.orderDetailsRepository.findOne({
-      where: { id }, // Especifica el ID en el objeto 'where'
-      relations: ['categories', 'subcategories', 'orderStatus', 'order'], // Carga las relaciones
+      where: { id },
+      relations: ['categories', 'subcategories', 'orderStatus', 'order'],
     });
 
     if (!orderDetails) {
@@ -105,49 +103,52 @@ export class OrderDetailsService {
     id: number,
     updateOrderDetailsDto: UpdateOrderDetailsDto,
   ): Promise<OrderDetailsE> {
-    const orderDetails = await this.orderDetailsRepository.preload({
-      id,
-      ...UpdateOrderDetailsDto,
+    const { categories, subcategories, orderStatusId, orderId, ...orderDetailsData } = updateOrderDetailsDto;
+
+    let orderDetails = await this.orderDetailsRepository.findOne({
+      where: { id },
+      relations: ['categories', 'subcategories', 'orderStatus', 'order'],
     });
 
     if (!orderDetails) {
       throw new NotFoundException(`OrderDetails with ID ${id} not found`);
     }
 
-    if (updateOrderDetailsDto.categories) {
-      const categoryEntities = await this.categoryRepository.findByIds(
-        updateOrderDetailsDto.categories,
-      );
+    // Actualizar campos principales
+    orderDetails = this.orderDetailsRepository.merge(orderDetails, orderDetailsData);
+
+    // Actualizar categorías si es necesario
+    if (categories) {
+      const categoryEntities = await this.categoryRepository.findByIds(categories);
       orderDetails.categories = categoryEntities;
     }
 
-    if (updateOrderDetailsDto.subcategories) {
-      const subcategoryEntities = await this.subcategoryRepository.findByIds(
-        updateOrderDetailsDto.subcategories,
-      );
+    // Actualizar subcategorías si es necesario
+    if (subcategories) {
+      const subcategoryEntities = await this.subcategoryRepository.findByIds(subcategories);
       orderDetails.subcategories = subcategoryEntities;
     }
 
-    if (updateOrderDetailsDto.orderStatusId) {
+    // Actualizar estado de la orden si es necesario
+    if (orderStatusId) {
       const orderStatus = await this.orderStatusRepository.findOne({
-        where: { id: updateOrderDetailsDto.orderStatusId },
+        where: { id: orderStatusId },
       });
       if (!orderStatus) {
         throw new NotFoundException(
-          `OrderStatus with ID ${updateOrderDetailsDto.orderStatusId} not found`,
+          `OrderStatus with ID ${orderStatusId} not found`,
         );
       }
       orderDetails.orderStatus = orderStatus;
     }
 
-    if (updateOrderDetailsDto.orderId) {
+    // Actualizar orden si es necesario
+    if (orderId) {
       const order = await this.orderRepository.findOne({
-        where: { id: updateOrderDetailsDto.orderId },
+        where: { id: orderId },
       });
       if (!order) {
-        throw new NotFoundException(
-          `Order with ID ${updateOrderDetailsDto.orderId} not found`,
-        );
+        throw new NotFoundException(`Order with ID ${orderId} not found`);
       }
       orderDetails.order = order;
     }

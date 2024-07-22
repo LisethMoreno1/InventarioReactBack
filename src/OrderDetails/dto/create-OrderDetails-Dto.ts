@@ -1,13 +1,11 @@
+import { Type } from 'class-transformer';
 import {
   IsArray,
-  IsDecimal,
   IsInt,
   IsNotEmpty,
   IsNumber,
-  IsOptional,
   IsString,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 
 export class CreateOrderDetailsDto {
   @IsString()
@@ -22,10 +20,6 @@ export class CreateOrderDetailsDto {
   plateNumber: string;
 
   @IsString()
-  @IsNotEmpty()
-  vinNumber: string;
-
-  @IsString()
   descriptionOfProblem: string;
 
   @IsArray()
@@ -33,18 +27,6 @@ export class CreateOrderDetailsDto {
 
   @IsArray()
   subcategories: number[];
-
-  @IsNumber()
-  laborCost: number;
-
-  @IsNumber()
-  partsCost: number;
-
-  @IsNumber()
-  totalEstimatedCost: number;
-
-  @IsNumber()
-  discounts?: number;
 
   @IsNumber()
   orderStatusId: number;
