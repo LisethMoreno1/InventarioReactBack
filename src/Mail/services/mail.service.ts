@@ -28,8 +28,8 @@ export class MailService {
       const configData = fs.readFileSync(configPath, 'utf8');
       this.config = JSON.parse(configData) as EmailConfig;
     } catch (error) {
-      console.error('Error reading config file:', error);
-    }
+/*       console.error('Error reading config file:', error);
+ */    }
 
     this.transporter = nodemailer.createTransport({
       host: this.config.SMTP_HOST,

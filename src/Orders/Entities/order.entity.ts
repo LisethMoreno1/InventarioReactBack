@@ -5,10 +5,12 @@ import {
   ManyToOne,
   JoinColumn,
   OneToOne,
+  OneToMany,
 } from 'typeorm';
 import { Customers } from '../../Customers/Entities/customers.entity';
 import { OrderDetailsE } from '../../OrderDetails/entities/orderDetails.entity';
 import { OrderStatus } from '../../OrderStatus/Entities/orderStatus.entity';
+import { Payment } from '../../Payment/entities/payment.entity';
 
 @Entity()
 export class Order {
@@ -31,4 +33,7 @@ export class Order {
 
   @ManyToOne(() => OrderStatus, (orderStatus) => orderStatus.orders)
   orderStatus: OrderStatus;
+
+  @OneToMany(() => Payment, (Payment) => Payment.customer)
+  Payment: Payment[];
 }

@@ -16,6 +16,10 @@ import { OrdersModule } from './Orders/orders.module';
 import { MailModule } from './Mail/mail.module';
 import { OrderDetailsModule } from './OrderDetails/orderDetails.module';
 import { OrderStatusModule } from './OrderStatus/orderStatus.module';
+import { TypeOfCurrencyModule } from './Mantenimiento/type-Of-currency/typeOfcurrency.module';
+import { TypeOfAddressModule } from './Mantenimiento/type-of-address/typeOfAddress.module';
+import { BankModule } from './Mantenimiento/bank/bank.module';
+import { PaymentModule } from './Payment/payment.module';
 
 const configPath = path.join(__dirname, '..', 'config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
@@ -33,7 +37,7 @@ const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
       username: config.database.username,
       password: config.database.password,
       database: config.database.database,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
       retryDelay: config.otherConfig.retryDelay,
       retryAttempts: config.otherConfig.retryAttempts,
@@ -50,7 +54,11 @@ const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
     OrdersModule,
     MailModule,
     OrderDetailsModule,
-    OrderStatusModule
+    OrderStatusModule,
+    TypeOfCurrencyModule,
+    TypeOfAddressModule,
+    BankModule,
+    PaymentModule
   ],
   controllers: [],
 })

@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { TypeOfIdentification } from '../../Mantenimiento/type-of-identification/entities/TypeOfIdentification.entity';
 import { Order } from '../../Orders/Entities/order.entity';
+import { Payment } from '../../Payment/entities/payment.entity';
 
 @Entity({ name: 'customers' })
 @Unique(['identificationNumber'])
@@ -35,4 +36,9 @@ export class Customers {
 
   @OneToMany(() => Order, (order) => order.customer)
   orders: Order[];
+
+  @OneToMany(() => Payment, (Payment) => Payment.customer)
+  Payment: Payment[];
+
+  
 }
