@@ -9,6 +9,7 @@ import {
 import { TypeOfIdentification } from '../../Mantenimiento/type-of-identification/entities/TypeOfIdentification.entity';
 import { Order } from '../../Orders/Entities/order.entity';
 import { Payment } from '../../Payment/entities/payment.entity';
+import { Purchase } from '../../purchaseOfProduct/entities/purchaseOfProduct.entity';
 
 @Entity({ name: 'customers' })
 @Unique(['identificationNumber'])
@@ -40,5 +41,6 @@ export class Customers {
   @OneToMany(() => Payment, (Payment) => Payment.customer)
   Payment: Payment[];
 
-  
+  @OneToMany(() => Purchase, (purchase) => purchase.customer)
+  purchases: Purchase[];
 }

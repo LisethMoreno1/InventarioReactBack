@@ -4,11 +4,12 @@ import { OrderStatusController } from './Controller/orderStatus.controller';
 import { OrderStatusService } from './Services/OrderStatus.service';
 import { OrderStatus } from './Entities/orderStatus.entity';
 import { OrderDetailsE } from '../OrderDetails/entities/orderDetails.entity';
+import { Order } from '../Orders/Entities/order.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([OrderStatus , OrderDetailsE])],
+  imports: [TypeOrmModule.forFeature([OrderStatus, OrderDetailsE, Order])],
   providers: [OrderStatusService],
   controllers: [OrderStatusController],
-  exports:[OrderStatusService]
+  exports: [OrderStatusService],
 })
 export class OrderStatusModule {}

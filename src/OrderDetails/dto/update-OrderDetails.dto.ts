@@ -27,23 +27,21 @@ export class UpdateOrderDetailsDto {
 
   @IsOptional()
   @IsArray()
-  categories?: number[]; // Array of Category IDs
+  categories?: number[];
 
   @IsOptional()
   @IsArray()
-  subcategories?: number[]; // Array of Subcategory IDs
+  subcategories?: number[];
 
   @IsOptional()
   @IsInt()
-  orderStatusId?: number; // ID of the OrderStatus
+  orderStatusId?: number;
 
   @IsOptional()
   @IsInt()
-  orderId?: number; // ID of the Order
+  orderId?: number;
 
   @IsOptional()
   @Type(() => Date)
   dateOfEntry?: Date;
-
-
 }

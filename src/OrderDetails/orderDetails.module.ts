@@ -7,6 +7,7 @@ import { OrderDetailsService } from './services/orderDetails.service';
 import { Category } from '../Mantenimiento/category/entities/category.entity';
 import { Subcategory } from '../Mantenimiento/category/Subcategory/entities/subcategory.entity';
 import { OrdersModule } from '../Orders/orders.module';
+import { Order } from '../Orders/Entities/order.entity';
 
 @Module({
   imports: [
@@ -15,8 +16,9 @@ import { OrdersModule } from '../Orders/orders.module';
       OrderStatus,
       Category,
       Subcategory,
+      Order,
     ]),
-    OrdersModule
+    OrdersModule,
   ],
   providers: [OrderDetailsService],
   controllers: [OrderDetailsController],

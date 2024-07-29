@@ -1,4 +1,3 @@
-// src/payment/payment.controller.ts
 import {
   Controller,
   Get,
@@ -13,7 +12,7 @@ import { CreatePaymentDto } from '../dto/payment.dto';
 import { PaymentService } from '../services/payment.service';
 import { ApiTags } from '@nestjs/swagger';
 
-ApiTags('Payments')
+ApiTags('Payments');
 @Controller('api/payments')
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}

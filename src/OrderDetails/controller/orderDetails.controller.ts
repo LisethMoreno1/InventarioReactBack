@@ -5,7 +5,6 @@ import {
   Put,
   Body,
   Param,
-  NotFoundException,
 } from '@nestjs/common';
 import { OrderDetailsE } from '../entities/orderDetails.entity';
 import { CreateOrderDetailsDto } from '../dto/create-OrderDetails-Dto';

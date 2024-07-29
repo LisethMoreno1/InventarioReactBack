@@ -7,5 +7,5 @@ export class CreateGenderDto {
    */
   @ApiProperty({ example: 'Masculinos' })
   @IsNotEmpty({ message: 'El genre es obligatorio.' })
-  readonly genre: string;
+  genre: string;
 }
