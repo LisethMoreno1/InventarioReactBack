@@ -8,6 +8,7 @@ import {
   Param,
   ParseIntPipe,
   NotFoundException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { TypeOfIdentification } from '../entities/TypeOfIdentification.entity';
 import { TypeOfIdentificationService } from '../service/typeOfIdentification.service';
@@ -63,11 +64,19 @@ export class TypeOfIdentificationController {
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    const result = await this.typeOfIdentificationService.delete(id);
-    if (result === 0) {
-      throw new NotFoundException(
-        `TypeOfIdentification con ID ${id} no encontrado`,
+  async deleteTypeOfIdentification(@Param('id') id: number) {
+    try {
+      const result = await this.typeOfIdentificationService.delete(id);
+      if (!result) {
+        throw new NotFoundException(
+          `TypeOfIdentification with ID ${id} not found`,
+        );
+      }
+      return { message: 'TypeOfIdentification deleted successfully' };
+    } catch (error) {
+      console.error('Error deleting TypeOfIdentification:', error);
+      throw new InternalServerErrorException(
+        'Failed to delete TypeOfIdentification',
       );
     }
   }

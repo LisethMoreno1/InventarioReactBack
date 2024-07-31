@@ -60,8 +60,13 @@ export class TypeOfIdentificationService {
     return await this.typeOfIdentificationRepository.findOne({ where: { id } });
   }
 
-  async delete(id: number): Promise<number> {
-    const result = await this.typeOfIdentificationRepository.delete({ id });
-    return result.affected || 0;
+  async delete(id: number): Promise<boolean> {
+    const result = await this.typeOfIdentificationRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(
+        `TypeOfIdentification with ID ${id} not found`,
+      );
+    }
+    return true;
   }
 }
