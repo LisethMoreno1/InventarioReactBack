@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Payment } from '../../../Payment/entities/payment.entity';
 
 @Entity({ schema: 'Mantenimiento', name: 'banks' })
 export class Bank {
@@ -10,4 +11,8 @@ export class Bank {
 
   @Column()
   name: string;
+
+  @OneToMany(() => Payment, (payment) => payment.bank)
+  payments: Payment[];
+
 }

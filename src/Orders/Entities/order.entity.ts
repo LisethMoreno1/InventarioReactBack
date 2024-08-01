@@ -34,6 +34,6 @@ export class Order {
   @ManyToOne(() => OrderStatus, (orderStatus) => orderStatus.orders)
   orderStatus: OrderStatus;
 
-  @OneToMany(() => Payment, (Payment) => Payment.customer)
-  Payment: Payment[];
+  @OneToMany(() => Payment, (payment) => payment.order)
+  payments: Payment[];
 }

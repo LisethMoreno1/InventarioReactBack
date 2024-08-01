@@ -1,12 +1,11 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
+  Entity,
   OneToMany,
-  ManyToOne,
+  PrimaryGeneratedColumn
 } from 'typeorm';
-import { User } from '../../../users/entities/user.entity';
 import { Customers } from '../../../Customers/Entities/customers.entity';
+import { User } from '../../../users/entities/user.entity';
 
 @Entity({ schema: 'Mantenimiento', name: 'TypeOfIdentification' })
 export class TypeOfIdentification {

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Payment } from '../entities/payment.entity';
@@ -6,6 +6,7 @@ import { CreatePaymentDto } from '../dto/payment.dto';
 import { OrderStatus } from '../../OrderStatus/Entities/orderStatus.entity';
 import { Order } from '../../Orders/Entities/order.entity';
 import { Customers } from '../../Customers/Entities/customers.entity';
+import { Bank } from '../../Mantenimiento/bank/entities/bank.entity';
 
 @Injectable()
 export class PaymentService {
@@ -18,61 +19,82 @@ export class PaymentService {
     private readonly orderRepository: Repository<Order>,
     @InjectRepository(Customers)
     private readonly customersRepository: Repository<Customers>,
+
+    @InjectRepository(Bank)
+    private readonly bankRepository: Repository<Bank>,
   ) {}
 
   async create(createPaymentDto: CreatePaymentDto): Promise<Payment> {
-    const orderStatus = await this.orderStatusRepository.findOneBy({ id: createPaymentDto.orderStatusId });
-    if (!orderStatus) {
-      throw new Error(`OrderStatus with ID ${createPaymentDto.orderStatusId} not found`);
-    }
-
-    const order = await this.orderRepository.findOneBy({ id: createPaymentDto.orderId });
+    const order = await this.orderRepository.findOne({
+      where: { id: createPaymentDto.orderId },
+    });
     if (!order) {
-      throw new Error(`Order with ID ${createPaymentDto.orderId} not found`);
+      throw new NotFoundException(
+        `Order with ID ${createPaymentDto.orderId} not found`,
+      );
     }
 
-    const customer = await this.customersRepository.findOneBy({ identificationNumber: createPaymentDto.customerIdentificationNumber });
+    const customer = await this.customersRepository.findOne({
+      where: {
+        identificationNumber: createPaymentDto.customerIdentificationNumber,
+      },
+    });
     if (!customer) {
-      throw new Error(`Customer with ID ${createPaymentDto.customerIdentificationNumber} not found`);
+      throw new NotFoundException(
+        `Customer with ID ${createPaymentDto.customerIdentificationNumber} not found`,
+      );
     }
 
     const payment = this.paymentRepository.create({
       ...createPaymentDto,
-      orderStatus,
       order,
       customer,
     });
 
     return await this.paymentRepository.save(payment);
   }
-  
+
   async findAll(): Promise<Payment[]> {
     return await this.paymentRepository
       .createQueryBuilder('payment')
       .leftJoinAndSelect('payment.order', 'order')
       .leftJoinAndSelect('payment.customer', 'customer')
-      .leftJoinAndSelect('order.orderStatus', 'orderStatus')
+      .leftJoinAndSelect('payment.bank', 'bank')
       .getMany();
   }
 
   async findOne(orderNumber: string): Promise<Payment> {
-    return await this.paymentRepository
+    const payment = await this.paymentRepository
       .createQueryBuilder('payment')
       .leftJoinAndSelect('payment.order', 'order')
       .leftJoinAndSelect('payment.customer', 'customer')
-      .leftJoinAndSelect('order.orderStatus', 'orderStatus')
+      .leftJoinAndSelect('payment.bank', 'bank')
       .where('payment.orderNumber = :orderNumber', { orderNumber })
       .getOne();
+
+    if (!payment) {
+      throw new NotFoundException(
+        `Payment with order number ${orderNumber} not found`,
+      );
+    }
+
+    return payment;
   }
+
   async update(
     orderNumber: string,
     updatePaymentDto: CreatePaymentDto,
   ): Promise<Payment> {
-    await this.paymentRepository.update(orderNumber, updatePaymentDto);
+    const payment = await this.findOne(orderNumber);
+
+    await this.paymentRepository.update(payment.id, updatePaymentDto);
+
     return this.findOne(orderNumber);
   }
 
   async remove(orderNumber: string): Promise<void> {
-    await this.paymentRepository.delete(orderNumber);
+    const payment = await this.findOne(orderNumber);
+
+    await this.paymentRepository.delete(payment.id);
   }
 }

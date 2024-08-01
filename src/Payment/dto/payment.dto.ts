@@ -40,10 +40,6 @@ export class CreatePaymentDto {
   @IsNumber()
   bankId: number;
 
-  @ApiProperty({ example: '1' })
-  @IsNumber()
-  orderStatusId: number;
-
   @ApiProperty({ example: '22' })
   @IsNotEmpty()
   @IsNumber()

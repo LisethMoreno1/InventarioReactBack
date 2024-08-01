@@ -6,10 +6,11 @@ import { Order } from './Entities/order.entity';
 import { CustomersModule } from '../Customers/customers.module';
 import { OrderDetailsE } from '../OrderDetails/entities/orderDetails.entity';
 import { OrderStatusModule } from '../OrderStatus/orderStatus.module';
+import { OrderStatus } from '../OrderStatus/Entities/orderStatus.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Order]),
+    TypeOrmModule.forFeature([Order, OrderStatus]),
     CustomersModule,
     OrderDetailsE,
     OrderStatusModule,

@@ -20,7 +20,6 @@ export class OrderStatus {
   @OneToMany(() => Order, (order) => order.orderStatus)
   orders: Order[];
 
-
   @OneToMany(() => Payment, (Payment) => Payment.customer)
   Payment: Payment[]
 
