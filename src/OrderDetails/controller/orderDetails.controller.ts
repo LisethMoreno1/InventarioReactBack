@@ -7,7 +7,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { OrderDetailsE } from '../entities/orderDetails.entity';
-import { CreateOrderDetailsDto } from '../dto/create-OrderDetails-Dto';
+import { CreateOrderDetailsDto } from '../dto/create-OrderDetails-dto';
 import { OrderDetailsService } from '../services/orderDetails.service';
 import { ApiTags, ApiParam, ApiBody } from '@nestjs/swagger';
 

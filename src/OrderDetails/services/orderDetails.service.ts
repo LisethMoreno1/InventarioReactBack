@@ -5,7 +5,7 @@ import { Category } from '../../Mantenimiento/category/entities/category.entity'
 import { Subcategory } from '../../Mantenimiento/category/Subcategory/entities/subcategory.entity';
 import { Order } from '../../Orders/Entities/order.entity';
 import { OrderStatus } from '../../OrderStatus/Entities/orderStatus.entity';
-import { CreateOrderDetailsDto } from '../dto/create-OrderDetails-Dto';
+import { CreateOrderDetailsDto } from '../dto/create-OrderDetails-dto';
 import { UpdateOrderDetailsDto } from '../dto/update-OrderDetails.dto';
 import { OrderDetailsE } from '../entities/orderDetails.entity';
 

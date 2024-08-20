@@ -86,15 +86,12 @@ export class PaymentService {
     updatePaymentDto: CreatePaymentDto,
   ): Promise<Payment> {
     const payment = await this.findOne(orderNumber);
-
     await this.paymentRepository.update(payment.id, updatePaymentDto);
-
     return this.findOne(orderNumber);
   }
 
   async remove(orderNumber: string): Promise<void> {
     const payment = await this.findOne(orderNumber);
-
     await this.paymentRepository.delete(payment.id);
   }
 }

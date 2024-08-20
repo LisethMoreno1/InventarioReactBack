@@ -3,7 +3,7 @@ import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { OrderStatusService } from '../Services/OrderStatus.service';
 import { OrderStatus } from '../Entities/orderStatus.entity';
-import { CreateOrderStatusDto } from '../Dto/create-OrderStatus.Dto';
+import { CreateOrderStatusDto } from '../Dto/create-OrderStatus.dto';
 
 @ApiTags('Order Status')
 @Controller('api/orderStatus')
