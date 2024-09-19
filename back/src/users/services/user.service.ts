@@ -148,29 +148,24 @@ export class UserService {
 
   //Eliminar por estado
   async delete(identificationNumber: string, state: number): Promise<boolean> {
-    // Incluir solo usuarios activos en la búsqueda
-    const user = await this.userRepo.findOne({
-      where: { identificationNumber, isActive: true }, // Solo buscar usuarios activos
-    });
-
+    // Buscar usuario independientemente de su estado actual
+    const user = await this.userRepo.findOne({ where: { identificationNumber } });
+  
     if (!user) {
-      throw new NotFoundException(`Usuario con ID ${identificationNumber} no encontrado o ya está inactivo`);
+      throw new NotFoundException(`Usuario con ID ${identificationNumber} no encontrado`);
     }
-
-    // Verificar que el estado sea 1 o 0
-    /*     Activo = 1
-        Desactivo = 0 */
+  
+    // Verificar que el estado sea 1 o 0 (1 = activar, 0 = desactivar)
     if (state !== 0 && state !== 1) {
       throw new BadRequestException('Valor de estado no válido, debe ser 0 o 1');
     }
-
-    // Actualizar isActive según el valor de state
+  
+    // Actualizar el estado del usuario
     user.isActive = state === 1;
     await this.userRepo.save(user);
-
+  
     return true;
   }
-
 
 
 
