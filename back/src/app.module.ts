@@ -26,6 +26,9 @@ import { UserModule } from './users/user.module';
 const configPath = path.join(__dirname, '..', 'config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
+// Comprobación de existencia de las claves necesarias
+const retryDelay = config.otherConfig?.retryDelay ?? 5000; // Valor predeterminado si no existe
+const retryAttempts = config.otherConfig?.retryAttempts ?? 3;
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -41,8 +44,8 @@ const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
       database: config.database.database,
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
-      retryDelay: config.otherConfig.retryDelay,
-      retryAttempts: config.otherConfig.retryAttempts,
+      retryDelay: retryDelay,
+      retryAttempts: retryAttempts,
     }),
     UserModule,
     RolesModule,
@@ -62,7 +65,7 @@ const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
     BankModule,
     PaymentModule,
     ProductModule,
-    PurchaseOfProductModule
+    PurchaseOfProductModule,
   ],
   controllers: [],
 })

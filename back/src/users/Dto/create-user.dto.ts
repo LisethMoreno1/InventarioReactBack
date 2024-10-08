@@ -86,8 +86,8 @@ export class CreateUserDto {
   password: string;
 
   /**
- * Estado del ususario  del usuario.
- */
+   * Estado del ususario  del usuario.
+   */
 
   @ApiProperty({ example: true })
   isActive: boolean;

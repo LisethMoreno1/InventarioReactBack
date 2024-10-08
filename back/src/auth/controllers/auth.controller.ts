@@ -20,5 +20,4 @@ export class AuthController {
   requestPasswordReset(@Body() resetPasswordDto: ResetPasswordDto) {
     return this.authService.requestPasswordReset(resetPasswordDto);
   }
-
 }

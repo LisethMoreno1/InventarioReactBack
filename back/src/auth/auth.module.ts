@@ -14,7 +14,7 @@ import { MailModule } from '../Mail/mail.module';
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '1d' },
     }),
-    MailModule
+    MailModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],
