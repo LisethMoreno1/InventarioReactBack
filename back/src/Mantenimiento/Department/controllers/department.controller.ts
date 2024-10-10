@@ -7,6 +7,7 @@ import {
   Body,
   Param,
   ValidationPipe,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { DepartmentsService } from '../services/department.service';
@@ -28,7 +29,9 @@ export class DepartmentsController {
         CreateDepartmentDto,
       );
     } catch (error) {
-      throw new Error('Error al crear el departamento');
+      throw new InternalServerErrorException(
+        `Error al crear el departamento: ${error.message}`,
+      );
     }
   }
 

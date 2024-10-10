@@ -25,6 +25,7 @@ export class DepartmentsService {
       throw new Error('Error al crear el departamento');
     }
   }
+
   async findAllDepartments(): Promise<department[]> {
     return this.departmentsRepository.find({ relations: ['cities'] });
   }
