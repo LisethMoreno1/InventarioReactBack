@@ -19,9 +19,14 @@ export class DepartmentsService {
   ): Promise<any> {
     try {
       const newDepartment =
-        await this.departmentsRepository.create(createDepartmentDto);
-      return await this.departmentsRepository.save(newDepartment);
+        this.departmentsRepository.create(createDepartmentDto);
+
+      const savedDepartment =
+        await this.departmentsRepository.save(newDepartment);
+
+      return savedDepartment;
     } catch (error) {
+      console.error('Error en el servicio al crear departamento:', error);
       throw new Error('Error al crear el departamento');
     }
   }

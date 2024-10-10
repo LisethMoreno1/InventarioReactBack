@@ -29,6 +29,7 @@ export class DepartmentsController {
         CreateDepartmentDto,
       );
     } catch (error) {
+      console.error('Error en el controlador al crear departamento:', error);
       throw new InternalServerErrorException(
         `Error al crear el departamento: ${error.message}`,
       );
